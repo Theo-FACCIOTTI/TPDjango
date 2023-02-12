@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Answer update{% endblock %}
+
+{% block content %}
+    <h1>Answer update</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div>{{ form.text.label }}</div>
+        <div> {{ form.text }}</div>
+        <button type="submit">Update</button>
+    </form>
+
+{% endblock %}

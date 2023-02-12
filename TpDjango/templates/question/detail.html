@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ question.title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ question.title }}</h1>
+    <ul>
+        {% for tag in question.get_Tags %} 
+            <li>
+                {% for name, value in tag.get_fields %}
+                    {% if value %}
+                        {{ name }} => {{ value }}
+                    {% endif %}
+                {% endfor %}
+            </li>
+        {% endfor %}
+        {% for name, value in question.get_fields %}
+            <li>
+                {% if value %}
+                    {{ name }} => {{ value }}
+                {% endif %}
+            </li>
+        {% endfor %}
+        <li><a href="{% url 'profile' question.get_Author.id %}">{{question.get_Author.username}}</a></li>
+    </ul>
+    <ul>
+        <li><a href="{% url 'question_answer' question.id %}">Answer</a></li>
+        {% if user.is_authenticated %}
+            {% if user.get_username == question.get_Author.username %}
+                <li><a href="{% url 'question_update' question.id %}">Update</a></li>
+            {% endif %}
+         {% endif %}
+    </ul>
+    {% for answer in question.get_Answers %}
+        <ul>
+            {% for tag in answer.get_Tags %} 
+            <li>
+                {% for name, value in tag.get_fields %}
+                    {% if value %}
+                        {{ name }} => {{ value }}
+                    {% endif %}
+                {% endfor %}
+            </li>
+            {% endfor %}
+            {% for name, value in answer.get_fields %}
+                <li>
+                    {% if value %}
+                        {{ name }} => {{ value }}
+                    {% endif %}
+                </li>
+            {% endfor %}
+            <li><a href="{% url 'profile' answer.get_Author.id %}">{{answer.get_Author.username}}</a></li>
+        </ul>
+        <ul>
+            <li><a href="{% url 'answer_answer' question.id answer.id %}">Answer</a></li>
+            {% if user.is_authenticated %}
+                {% if user.get_username == answer.get_Author.username %}
+                    <li><a href="{% url 'answer_delete' answer.id %}">Delete</a></li>
+                    <li><a href="{% url 'answer_update' answer.id %}">Update</a></li>
+                {% endif %}
+            {% endif %}
+        </ul>
+    {% endfor %}
+{% endblock %}
